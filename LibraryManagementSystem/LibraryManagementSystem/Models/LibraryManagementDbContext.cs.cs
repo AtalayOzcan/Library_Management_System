@@ -8,6 +8,7 @@ namespace LibraryManagementSystem.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Loan> Loans { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,9 +30,6 @@ namespace LibraryManagementSystem.Models
                 entity.Property(b => b.Author)
                 .HasMaxLength(100)
                 .IsRequired();
-
-                entity.Property<string>(b => b.Publisher)
-                .HasMaxLength(100);
 
                 entity.Property(b => b.Description)
                 .HasMaxLength(1000);
@@ -100,6 +98,18 @@ namespace LibraryManagementSystem.Models
                 entity.HasOne(l => l.Member)
                 .WithMany(m => m.Loans)
                 .HasForeignKey (l => l.MemberId);
+            });
+
+            modelBuilder.Entity<Publisher>(entity =>
+            {
+                entity.HasKey(p => p.PublisherId);
+
+                entity.Property(p => p.PublisherName)
+                .HasMaxLength(100);
+
+                entity.HasMany(p => p.Books)
+                .WithOne(b => b.Publisher)
+                .HasForeignKey(b => b.PublisherId);
             });
         }
 
