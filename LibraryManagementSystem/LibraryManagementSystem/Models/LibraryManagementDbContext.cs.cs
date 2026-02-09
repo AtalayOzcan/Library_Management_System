@@ -5,7 +5,7 @@ namespace LibraryManagementSystem.Models
     public class Context : DbContext
     {
         public DbSet<Book> Books { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categorys { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
