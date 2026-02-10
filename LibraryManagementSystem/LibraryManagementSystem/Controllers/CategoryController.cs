@@ -1,5 +1,7 @@
 ﻿using LibraryManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -30,5 +32,35 @@ namespace LibraryManagementSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var category = _context.Categorys.Find(id);
+            return View(category);
+        }
+        [HttpPost]
+        public IActionResult Edit(Category category)
+        {
+            var categoryToUpdate = _context.Categorys.Find(category.CategoryId);
+
+            if (categoryToUpdate != null)
+            {
+                categoryToUpdate.CategoryName = category.CategoryName;
+                categoryToUpdate.Description = category.Description;
+
+                _context.SaveChanges();
+            }
+
+                return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var category = _context.Categorys.Find(id);
+            _context.Remove(category);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 }
