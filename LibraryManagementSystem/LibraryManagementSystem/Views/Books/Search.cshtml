@@ -1,0 +1,30 @@
+﻿@using LibraryManagementSystem.Models
+@model Book
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-warning text-white">
+            <h3>Book Searching Screen</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Search" method="get">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">ISBN Number</label>
+                    <input type="text" name="isbn" class="form-control" placeholder="Enter ISBN Number" maxlength="13" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Search
+                </button>
+
+                <a asp-controller="Books" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger mt-3">@ViewBag.Message</div>
+            }
+        </div>
+    </div>
+</div>

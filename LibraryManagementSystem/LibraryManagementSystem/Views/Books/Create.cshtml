@@ -1,0 +1,80 @@
+﻿@using LibraryManagementSystem.Models
+@model Book
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Add Book</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-controller="Books" asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="ISBN" class="form-label fw-semibold">ISBN</label>
+                            <input asp-for="ISBN" class="form-control fw-semibold" placeholder="Enter ISBN Number" maxlength="13"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-semibold">Book Name</label>
+                            <input asp-for="Title" class="form-control" placeholder="Enter Book Name" maxlength="200" />
+                        </div> 
+
+                        <div class="mb-3">
+                            <label asp-for="Author" class="form-label fw-semibold">Author</label>
+                            <input asp-for="Author" class="form-control fw-semibold" placeholder="Enter Author" maxlength="100" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PublishYear" class="form-label fw-semibold">Publish Year</label>
+                            <input asp-for="PublishYear" type="number" min="1" class="form-control fw-semibold" placeholder="Enter Publish Year"  />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PageCount" class="form-label fw-semibold">Page Count</label>
+                            <input asp-for="PageCount" type="number" min="1" class="form-control fw-semibold" placeholder="Enter Page Count" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Category" class="form-label fw-semibold">Category</label>
+                            <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control">
+                                <option value="">-- Kategori Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Publisher" class="form-label fw-semibold">Publisher</label>
+                            <select asp-for="PublisherId" asp-items="@ViewBag.Publishers" class="form-control">
+                                <option value="">-- Yayınevi Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="StockCount" class="form-label fw-semibold">Stock Count</label>
+                            <input asp-for="StockCount" type="number" min="1" class="form-control fw-semibold" placeholder="Enter Stock Count" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="IsAvailable" class="form-label fw-semibold">Is Available</label>
+                            <select asp-for="IsAvailable" class="form-control fw-semibold">
+                                <option value="">-- Select(T/F) --</option>
+                                <option value="true">Available</option>
+                                <option value="false">Not Available</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter category description" maxlength="1000"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4">Save</button>
+                            <a asp-controller="Books" asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
