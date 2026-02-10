@@ -13,6 +13,7 @@ namespace LibraryManagementSystem.Controllers
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
 
@@ -22,6 +23,7 @@ namespace LibraryManagementSystem.Controllers
                 .ToList();
             return View(books);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -45,6 +47,7 @@ namespace LibraryManagementSystem.Controllers
 
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Book book)
         {
@@ -53,6 +56,7 @@ namespace LibraryManagementSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             var books = _context.Books.Find(id);
@@ -60,27 +64,33 @@ namespace LibraryManagementSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         [HttpGet]
-        public IActionResult Search(string isbn)
+        public IActionResult Search(string isbn, string bookTitle, string author)
         {
-            if (string.IsNullOrEmpty(isbn))
+            ViewBag.Isbn = isbn;
+            ViewBag.BookTitle = bookTitle;
+            ViewBag.Author = author;
+
+            if (string.IsNullOrEmpty(isbn) && string.IsNullOrEmpty(bookTitle) && string.IsNullOrEmpty(author))
             {
-                return View();
+                return View(new List<Book>()); // Boş liste gönderiyoruz
             }
 
-            // 2. Veritabanında ISBN'i ara (FirstOrDefault ilk bulduğunu getirir)
-            var book = _context.Books.FirstOrDefault(x => x.ISBN == isbn);
+            // 3. Sorguyu Hazırla
+            var query = _context.Books
+                .Include(x => x.Category)
+                .Include(x => x.Publisher)
+                .AsQueryable();
 
-            // 3. Kitap Bulunduysa -> Edit sayfasına yönlendir (veya Details)
-            if (book != null)
-            {
-                TempData["Message"] = $"The book you are looking for has been found: {book.Title} - Stock Status: {book.StockCount}";
-                return RedirectToAction("Index", new { id = book.BookId });       
-            }
+            // 4. Filtreleri Uygula
+            if (!string.IsNullOrEmpty(isbn)) query = query.Where(x => x.ISBN.Contains(isbn));
+            if (!string.IsNullOrEmpty(bookTitle)) query = query.Where(x => x.Title.Contains(bookTitle));
+            if (!string.IsNullOrEmpty(author)) query = query.Where(x => x.Author.Contains(author));
 
-            // 4. Kitap Bulunamadıysa -> Hata mesajı ver ve sayfada kal
-            ViewBag.Message = "No books were found with this ISBN number!";
-            return View();
+            // 5. Sonuçları listeye çevir ve AYNI SAYFAYA model olarak gönder
+            var resultBooks = query.ToList();
+            return View(resultBooks);
         }
     }
 }
