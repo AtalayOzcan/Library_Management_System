@@ -27,7 +27,7 @@ namespace LibraryManagementSystem.Controllers
         {
             member.RegistrationDate = DateTime.UtcNow;
             var randomNumber = new Random();
-            member.MemberNumber = randomNumber.Next(100000,400000).ToString();
+            member.MemberNumber = randomNumber.Next(100000, 400000).ToString();
             _context.Members.Add(member);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -46,19 +46,26 @@ namespace LibraryManagementSystem.Controllers
             ViewBag.Name = name;
             ViewBag.Email = email;
 
-            if(string.IsNullOrEmpty(memberNumber) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(memberNumber) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(email))
             {
                 return View(new List<Member>());
             }
 
             var query = _context.Members.AsQueryable();
 
-            if (!string.IsNullOrEmpty(memberNumber)) { } query = query.Where(x => x.MemberNumber.ToLower().Contains(memberNumber));
+            if (!string.IsNullOrEmpty(memberNumber))
+            {
+                query = query.Where(x => x.MemberNumber.ToLower().Contains(memberNumber));
+            }
 
-            if(!string.IsNullOrEmpty(name)) query = query.Where(x => x.FirstName.ToLower().Contains(name)|| x.LastName.ToLower().Contains(name));
-
-            if (!string.IsNullOrEmpty(email)) query = query.Where(x => x.Email.ToLower().Contains(email));
-
+            if (!string.IsNullOrEmpty(name)) 
+            {
+                query = query.Where(x => x.FirstName.ToLower().Contains(name));
+            }
+            if (!string.IsNullOrEmpty(email)) 
+            {
+                query = query.Where(x => x.Email.ToLower().Contains(email));
+            }
             var resultMembers = query.ToList();
 
             return View(resultMembers);
