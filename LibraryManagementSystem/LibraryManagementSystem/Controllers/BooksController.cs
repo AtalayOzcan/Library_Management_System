@@ -84,9 +84,9 @@ namespace LibraryManagementSystem.Controllers
                 .AsQueryable();
 
             // 4. Filtreleri Uygula
-            if (!string.IsNullOrEmpty(isbn)) query = query.Where(x => x.ISBN.Contains(isbn));
-            if (!string.IsNullOrEmpty(bookTitle)) query = query.Where(x => x.Title.Contains(bookTitle));
-            if (!string.IsNullOrEmpty(author)) query = query.Where(x => x.Author.Contains(author));
+            if (!string.IsNullOrEmpty(isbn)) query = query.Where(x => x.ISBN.ToLower().Contains(isbn));
+            if (!string.IsNullOrEmpty(bookTitle)) query = query.Where(x => x.Title.ToLower().Contains(bookTitle));
+            if (!string.IsNullOrEmpty(author)) query = query.Where(x => x.Author.ToLower().Contains(author));
 
             // 5. Sonuçları listeye çevir ve AYNI SAYFAYA model olarak gönder
             var resultBooks = query.ToList();

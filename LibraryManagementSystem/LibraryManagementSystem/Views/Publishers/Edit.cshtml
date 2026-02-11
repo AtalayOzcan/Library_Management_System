@@ -1,0 +1,24 @@
+﻿@using LibraryManagementSystem.Models
+@model Publisher
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-warning text-white">
+            <h3>Publisher Update Screen</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+
+                <input type="hidden" asp-for="PublisherId" />
+
+                <div class="mb-3">
+                    <label asp-for="PublisherName" class="form-label fw-semibold">Publisher Name</label>
+                    <input type="text" asp-for="PublisherName" class="form-control" placeholder="Enter Publisher Name" />
+                </div>
+
+                <button type="submit" class="btn btn-warning">Save Changes</button>
+                <a href="/Publishers/Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
