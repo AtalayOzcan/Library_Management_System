@@ -1,0 +1,81 @@
+﻿@model List<LibraryManagementSystem.Models.Loan>
+
+@{
+    ViewBag.Title = "Active Loans";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Active Loans</h3>
+        <a asp-controller="Loans" asp-action="Lend" class="btn btn-primary">Add New Loan</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No active loans found.</div>
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Member</th>
+                            <th>Book</th>
+                            <th>Loan Date</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model)
+                        {
+                            @* Late or Not *@
+                            bool isOverdue = DateTime.Now > loan.DueDate;
+
+                            <tr class="@(isOverdue ? "table-danger" : "")">
+                                <td>@loan.LoanId</td>
+                                <td>@loan.Member.FirstName @loan.Member.LastName</td>
+                                <td>@loan.Book.Title</td>
+                                <td>@loan.LoanDate.ToString("dd.MM.yyyy")</td>
+                                <td>@loan.DueDate.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    @if (isOverdue)
+                                    {
+                                        @* How many days late? *@
+                                        int lateDays = (int)(DateTime.Now - loan.DueDate).TotalDays;
+                                        <span class="badge bg-danger">@lateDays days late</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">On Time</span>
+                                    }
+                                </td>
+                                <td>
+                                    @*Quick Return Button*@
+                                    <form asp-controller="Loans" asp-action="Return" method="post" style="display:inline">
+                                        <input type="hidden" name="LoanId" value="@loan.LoanId" />
+                                        <button type="submit" class="btn btn-sm btn-warning">Return</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @*Total loans count*@
+        <div class="mt-2">
+            <small class="text-muted">Total: @Model.Count active loan(s)</small>
+        </div>
+    }
+</div>

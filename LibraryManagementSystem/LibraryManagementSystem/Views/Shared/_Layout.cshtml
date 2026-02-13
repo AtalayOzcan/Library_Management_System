@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Kütüphane Sistemi</title>
+    <title>@ViewBag.Title - Library System</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -37,7 +37,7 @@
             min-height: calc(100vh - 140px);
         }
 
-        /* Sol Menü */
+        /* Sidebar */
         .sidebar {
             width: 250px;
             background-color: #34495e;
@@ -91,7 +91,7 @@
                         font-weight: bold;
                     }
 
-        /* Ana İçerik */
+        /* Main Content */
         .main-content {
             flex: 1;
             padding: 30px;
@@ -111,7 +111,7 @@
         }
 
         /* Responsive */
-        .media (max-width: 768px) {
+        @@media (max-width: 768px) {
             .container-wrapper {
                 flex-direction: column;
             }
@@ -126,7 +126,6 @@
             }
         }
 
-        /* Kategori İkonları (isteğe bağlı) */
         .sidebar ul li a::before {
             content: "📚 ";
             margin-right: 8px;
@@ -138,74 +137,75 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>📚 Kütüphane Yönetim Sistemi</h1>
+        <h1>📚 Library Management System</h1>
     </div>
 
-    <!-- Ana Container -->
+    <!-- Main Container -->
     <div class="container-wrapper">
-        <!-- Sol Menü -->
+        <!-- Sidebar -->
         <aside class="sidebar">
-            <!-- Ana Sayfa -->
+
+            <!-- Main Menu -->
             <div class="menu-section">
-                <h3>Ana Menü</h3>
+                <h3>Main Menu</h3>
                 <ul>
-                    <li>@Html.ActionLink("Ana Sayfa", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 </ul>
             </div>
 
-            <!-- Kategoriler -->
+            <!-- Categories -->
             <div class="menu-section">
-                <h3>Kategoriler</h3>
+                <h3>Categories</h3>
                 <ul>
-                    <li>@Html.ActionLink("Kategori Listesi", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Kategori Ekle", "Create", "Category")</li>
-                    <li>@Html.ActionLink("Kategori Düzenle", "Edit", "Category")</li>
+                    <li>@Html.ActionLink("Category List", "Index", "Category")</li>
+                    <li>@Html.ActionLink("Add Category", "Create", "Category")</li>
                 </ul>
             </div>
 
-            <!-- Kitaplar -->
+            <!-- Books -->
             <div class="menu-section">
-                <h3>Kitaplar</h3>
+                <h3>Books</h3>
                 <ul>
-                    <li>@Html.ActionLink("Tüm Kitaplar", "Index", "Books")</li>
-                    <li>@Html.ActionLink("Kitap Ekle", "Create", "Books")</li>
-                    <li>@Html.ActionLink("Kitap Ara", "Search", "Books")</li>
+                    <li>@Html.ActionLink("All Books", "Index", "Books")</li>
+                    <li>@Html.ActionLink("Add Book", "Create", "Books")</li>
+                    <li>@Html.ActionLink("Search Book", "Search", "Books")</li>
                 </ul>
             </div>
 
+            <!-- Publishers -->
             <div class="menu-section">
-                <h3>Yayın Evleri</h3>
+                <h3>Publishers</h3>
                 <ul>
-                    <li>@Html.ActionLink("Yayın Evi Listesi", "Index", "Publishers")</li>
-                    <li>@Html.ActionLink("Yayın Evi Ekle", "Create", "Publishers")</li>
-                    <li>@Html.ActionLink("Yayın Evi Düzenle", "Edit", "Publishers")</li>
+                    <li>@Html.ActionLink("Publisher List", "Index", "Publishers")</li>
+                    <li>@Html.ActionLink("Add Publisher", "Create", "Publishers")</li>
                 </ul>
             </div>
 
-            <!-- Üyeler -->
+            <!-- Members -->
             <div class="menu-section">
-                <h3>Üyeler</h3>
+                <h3>Members</h3>
                 <ul>
-                    <li>@Html.ActionLink("Üye Listesi", "Index", "Members")</li>
-                    <li>@Html.ActionLink("Üye Ekle", "Create", "Members")</li>
-                    <li>@Html.ActionLink("Üye Ara", "Search", "Members")</li>
+                    <li>@Html.ActionLink("Member List", "Index", "Members")</li>
+                    <li>@Html.ActionLink("Add Member", "Create", "Members")</li>
+                    <li>@Html.ActionLink("Search Member", "Search", "Members")</li>
                 </ul>
             </div>
 
-            <!-- Ödünç İşlemleri -->
+            <!-- Loan Operations -->
             <div class="menu-section">
-                <h3>Ödünç İşlemleri</h3>
+                <h3>Loan Operations</h3>
                 <ul>
-                    <li>@Html.ActionLink("Ödünç Ver", "Lend", "Loans")</li>
-                    <li>@Html.ActionLink("İade Al", "Return", "Loans")</li>
-                    <li>@Html.ActionLink("Aktif Ödünçler", "Active", "Loans")</li>
-                    <li>@Html.ActionLink("Geciken Kitaplar", "Overdue", "Loans")</li>
-                    <li>@Html.ActionLink("İşlem Geçmişi", "History", "Loans")</li>
+                    <li>@Html.ActionLink("Lend Book", "Lend", "Loans")</li>
+                    <li>@Html.ActionLink("Return Book", "Return", "Loans")</li>
+                    <li>@Html.ActionLink("Active Loans", "Active", "Loans")</li>
+                    <li>@Html.ActionLink("Overdue Books", "Overdue", "Loans")</li>
+                    <li>@Html.ActionLink("Loan History", "History", "Loans")</li>
                 </ul>
             </div>
+
         </aside>
 
-        <!-- Ana İçerik Alanı -->
+        <!-- Main Content Area -->
         <main class="main-content">
             @RenderBody()
         </main>
@@ -213,14 +213,12 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; @DateTime.Now.Year - Kütüphane Yönetim Sistemi. Tüm hakları saklıdır.</p>
+        <p>&copy; @DateTime.UtcNow.Year - Library Management System. All rights reserved.</p>
     </footer>
 
-    <!-- ÖNCE JQUERY VE BOOTSTRAP YÜKLENMELİ -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- SONRA SAYFA SCRIPT'LERİ -->
     @RenderSection("scripts", required: false)
 </body>
 </html>
