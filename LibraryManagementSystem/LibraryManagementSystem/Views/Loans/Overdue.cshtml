@@ -1,0 +1,82 @@
+﻿@model List<LibraryManagementSystem.Models.Loan>
+
+@{
+    ViewBag.Title = "Overdue Books";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-danger">Overdue Books</h3>
+        <span class="badge bg-danger fs-6">@Model.Count overdue</span>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-success">No overdue books!</div>
+    }
+    else
+    {
+        <div class="card border-danger shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead style="background-color: #dc3545; color:white;">
+                        <tr>
+                            <th>#</th>
+                            <th>Member</th>
+                            <th>Book</th>
+                            <th>Due Date</th>
+                            <th>Days Late</th>
+                            <th>Fine ($)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model)
+                        {
+                            @*Overdue And Fine*@
+                            <tr style="background-color:whitesmoke">
+                                <td>@loan.LoanId</td>
+                                <td>
+                                    <strong class="text-danger">@loan.Member.FirstName @loan.Member.LastName</strong>
+                                    <br />
+                                    <small class="text-muted">@loan.Member.Phone</small>
+                                </td>
+                                <td>
+                                    <strong>@loan.Book.Title</strong>
+                                    <br />
+                                    <small class="text-muted">@loan.Book.Author</small>
+                                </td>
+                                <td>
+                                    <span class="text-danger fw-bold">
+                                        @loan.DueDate.ToString("dd.MM.yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">@loan.LateDays days</span>
+                                </td>
+                                <td>
+                                    <span class="text-danger fw-bold">@loan.Fine $</span>
+                                </td>
+                                <td>
+                                    @*Quick Return Button*@
+                                    <form asp-controller="Loans" asp-action="Return" method="post" style="display:inline">
+                                        <input type="hidden" name="LoanId" value="@loan.LoanId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Return</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-danger">
+                        <tr>
+                            <td colspan="5" class="fw-bold">Total Fine:</td>
+                            @* Toplam cezayı hesapla *@
+                            <td class="fw-bold text-danger">@Model.Sum(l => l.Fine) ₺</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    }
+</div>

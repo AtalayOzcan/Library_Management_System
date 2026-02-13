@@ -141,5 +141,55 @@ namespace LibraryManagementSystem.Controllers
             TempData["Success"] = "Book successfully returned!";
             return RedirectToAction("Active");
         }
+
+        public IActionResult Overdue()
+        {
+            
+            var loans = _context.Loans
+                .Include(l => l.Book)
+                .Include(l => l.Member)
+                .Where(l => l.IsReturned == false && l.DueDate < DateTime.UtcNow)
+                .ToList();
+
+            // Her biri için güncel gecikme ve cezayı hesapla
+            foreach (var l in loans)
+            {
+                l.LateDays = (int)(DateTime.UtcNow - l.DueDate).TotalDays;
+                l.Fine = l.LateDays * 100;
+            }
+
+            return View(loans);
+        }
+
+        public IActionResult History(string dateFilter, string memberFilter)
+        {
+            // Tüm ödünç kayıtlarını getir
+            var loans = _context.Loans
+                .Include(l => l.Book)
+                .Include(l => l.Member)
+                .AsQueryable();
+
+            // Üye adına göre filtrele
+            if (!string.IsNullOrEmpty(memberFilter))
+            {
+                loans = loans.Where(l => l.Member.FirstName.Contains(memberFilter) || l.Member.LastName.Contains(memberFilter));
+            }
+
+            // Tarihe göre filtrele (örn: "2024-01" gibi yıl-ay formatı)
+            if (!string.IsNullOrEmpty(dateFilter))
+            {
+                // Kullanıcının girdiği tarihi parse et
+                if (DateTime.TryParse(dateFilter, out DateTime parsedDate))
+                {
+                    loans = loans.Where(l => l.LoanDate.Year == parsedDate.Year && l.LoanDate.Month == parsedDate.Month);
+                }
+            }
+
+            // Filtreleri tekrar view'e gönder (input'ta kalsın diye)
+            ViewBag.DateFilter = dateFilter;
+            ViewBag.MemberFilter = memberFilter;
+
+            return View(loans.ToList());
+        }
     }
 }
